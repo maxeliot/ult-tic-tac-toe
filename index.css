@@ -4,13 +4,18 @@
     --eggplant: #744253;
 }
 
-
 body {
     /* background-color: var(--charcoal); */
     background-color: #222222;
     font: 35px Arial, sans-serif;
 }
+#main {
+    text-align: center;
+}
 
+
+
+/* ====== GRID STYLE ====== */
 .cell_l1 {
     display: flex;
     flex-direction: column;
@@ -19,6 +24,14 @@ body {
     height: 201px;
     margin: 0;  
     cursor: pointer;
+}
+
+.highlight-subgrid {
+    filter: brightness(0.77);
+}
+
+.row_l2 .highlight-cell {
+    filter: brightness(0.87);
 }
 
 .row_l1 {
@@ -49,22 +62,18 @@ body {
     height: 100%;
 }
 
+
+/* ====== BUTTON STYLE ====== */
 #but {
-    /* box-sizing: border-box; */
     width: 95px;
     height: 40px;
     border: 1px solid var(--pale-dogwoord);
     margin-top: 20px;
     border-radius: 4px;
-    font-family: Verdana,
-        Geneva, Tahoma, sans-serif;
-
+    font-family: Verdana, Tahoma, sans-serif;
     background-color: var(--pale-dogwoord);
     color: white;
     font-size: 20px;
     cursor: pointer;
 }
 
-#main {
-    text-align: center;
-}
