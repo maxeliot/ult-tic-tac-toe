@@ -1,0 +1,70 @@
+:root {
+    --charcoal: #233D4D;
+    --pale-dogwoord: #FAC9B8;
+    --eggplant: #744253;
+}
+
+
+body {
+    /* background-color: var(--charcoal); */
+    background-color: #222222;
+    font: 35px Arial, sans-serif;
+}
+
+.cell_l1 {
+    display: flex;
+    flex-direction: column;
+    border: white 2px solid;
+    width: 201px; 
+    height: 201px;
+    margin: 0;  
+    cursor: pointer;
+}
+
+.row_l1 {
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    width:100%;
+}
+
+.cell_l2 {
+    background-color: var(--pale-dogwoord);
+    border: white 1px solid;
+    width: 100%;
+    height: 100%;
+    margin: 0;  
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.row_l2 {
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    width:100%;
+    height: 100%;
+}
+
+#but {
+    /* box-sizing: border-box; */
+    width: 95px;
+    height: 40px;
+    border: 1px solid var(--pale-dogwoord);
+    margin-top: 20px;
+    border-radius: 4px;
+    font-family: Verdana,
+        Geneva, Tahoma, sans-serif;
+
+    background-color: var(--pale-dogwoord);
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+#main {
+    text-align: center;
+}
