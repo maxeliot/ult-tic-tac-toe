@@ -59,8 +59,9 @@ class MainGrid {
 	constructor() {
 		this.won = Player.None;
 		this.subgrids = Array(9).fill().map(() => new SubGrid());
-		this.anyGrid = -1;
+		this.anyGrid = -1; 
 		this.nextGrid = this.anyGrid;
+		this.lastMove = "0000";
 	}
 
 	//returns true if can play move, false otherwise
@@ -72,12 +73,23 @@ class MainGrid {
 		if(!this.subgrids[gridNbr].play(i, j)) //if can't play in subgrid, return false (dont'play)
 			return false; 
 		
+		//Move is playable
+		//unhighlight current grid
+		document.getElementById(`subgrid${gridNbr}`).classList.remove("highlight-subgrid");
+		//unhighlight played cell
+		document.getElementById(this.lastMove).classList.remove("highlight-cell");
+
 		if(this.subgrids[gridNbr].won != Player.None)
 			this.nextGrid = this.anyGrid;
 		else
 			this.nextGrid = i*3+j; //next grid is determined by cell of subgrid we played in
 		this.updateWon();
 
+		//highlight nextGrid
+		document.getElementById(`subgrid${this.nextGrid}`).classList.add("highlight-subgrid");
+		//highlight played cell
+		this.lastMove = [x, y ,i, j].join("");
+		document.getElementById(this.lastMove).classList.add("highlight-cell");
 		return true;
 	}
 
@@ -112,6 +124,9 @@ function createGrid(el) {
         for (y = 0; y < 3; y++) {
             const cell = document.createElement('div');
             cell.className = "cell_l1";
+
+			//make each subgrid have an independant id, useful for styling (e.g. highlighting next grid)
+			cell.id = `subgrid${x*3 + y}`
             makeInnerGrid(cell)
             row.appendChild(cell);
         }                
