@@ -1,4 +1,5 @@
 import { Player } from "./player.js";
+import { clearText, cantPlay, playerWon } from "./user-help.js";
 
 let currPlayer = Player.X;
 
@@ -30,7 +31,6 @@ class SubGrid {
 	play(i, j) {
 		if(this.won != Player.None || this.grid[i * 3 + j] != Player.None) 
 			return false;
-        console.log(this.won);
 		this.grid[i * 3 + j] = currPlayer;
 		this.updateWon();
 		return true;
@@ -41,7 +41,6 @@ class SubGrid {
 		for (let combination of winningCombinations) {
 			const [a, b, c] = combination;
 			if (this.grid[a] != Player.None && this.grid[a] === this.grid[b] && this.grid[a] === this.grid[c]) {
-                console.log(this.grid[a]);
                 this.won = this.grid[a];
                 return;
 			}
@@ -66,6 +65,7 @@ class MainGrid {
 
 	//returns true if can play move, false otherwise
 	play(x, y, i, j) {
+		clearText();
 		let gridNbr = x * 3 + y;
 		if(this.won != Player.None || (gridNbr != this.nextGrid && this.nextGrid != this.anyGrid)) 
 			return false;
@@ -81,12 +81,21 @@ class MainGrid {
 
 		if(this.subgrids[gridNbr].won != Player.None)
 			this.nextGrid = this.anyGrid;
-		else
-			this.nextGrid = i*3+j; //next grid is determined by cell of subgrid we played in
+		else {
+			//next grid is determined by cell of subgrid we played in
+			this.nextGrid = i*3+j;
+			if(this.subgrids[this.nextGrid].won != Player.None) {
+				this.nextGrid = this.anyGrid;
+			} 
+			//highlight nextGrid
+			let nxt = document.getElementById(`subgrid${this.nextGrid}`);
+			if(nxt != null) {
+				nxt.classList.add("highlight-subgrid");
+			}
+		}
 		this.updateWon();
 
-		//highlight nextGrid
-		document.getElementById(`subgrid${this.nextGrid}`).classList.add("highlight-subgrid");
+		
 		//highlight played cell
 		this.lastMove = [x, y ,i, j].join("");
 		document.getElementById(this.lastMove).classList.add("highlight-cell");
@@ -98,11 +107,13 @@ class MainGrid {
 			const [a, b, c] = combination;
 			if (this.subgrids[a].won === this.subgrids[b].won && this.subgrids[a].won === this.subgrids[c].won) {
 			  this.won = this.subgrids[a].won;
+			  playerWon(this.won);
 			  return;
 			}
 		}
 		if (!this.subgrids.map(subgrid => subgrid.won).includes(Player.None)) {
 			this.won = Player.Tie
+			playerWon(this.won);
 			return
 		}
 	}
@@ -164,8 +175,7 @@ function cellClick(x, y, i, j) {
 //checks if move is valid and then play move
 function makeMove(x, y, i, j) {
 	if(grid.play(x, y, i, j) === false) {
-		//TODO remove debugging log
-		console.log("can't play here");
+		cantPlay();
 		return;
 	}
 	cellClick(x, y, i, j);
