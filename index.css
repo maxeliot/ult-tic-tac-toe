@@ -77,3 +77,9 @@ body {
     cursor: pointer;
 }
 
+/* ====== USER HELP STYLE ====== */
+#user-help {
+    font-size: 24px;
+    color:white;
+    margin-top: 20px;
+}
