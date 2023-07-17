@@ -183,10 +183,6 @@ function makeMove(x, y, i, j) {
 }
 
 
-function reset() {
-	location.reload();
-}
 
+export { createGrid, makeMove };
 
-
-export { createGrid, makeMove, reset };
