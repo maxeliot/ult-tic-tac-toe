@@ -81,6 +81,16 @@ class MainGrid {
 		if(!this.subgrids[gridNbr].play(i, j)) 
 			return false; 
 		
+		//cross out subgrid if it is won
+		if(this.subgrids[gridNbr].won != Player.None) {
+			let el = document.getElementById(`subgrid${gridNbr}`)
+			el.querySelectorAll(".row_l2").forEach(el => el.style.display = 'none');
+			el.querySelector(".cross-out").display = 'block';
+			el.querySelector(".cross-out").textContent = this.subgrids[gridNbr].won;
+			el.querySelector(".cross-out").style.width = "100%";
+			el.querySelector(".cross-out").style.height = "100%";
+		}
+
 		//Move is playable
 		//unhighlight current grid
 		// document.getElementById(`subgrid${gridNbr}`).classList.remove("highlight-subgrid");
@@ -153,6 +163,13 @@ function createGrid(el) {
 			//make each subgrid have an independant id, useful for styling (e.g. highlighting next grid)
 			cell.id = `subgrid${x*3 + y}`
             makeInnerGrid(cell)
+
+			//text area to cross out entire subgrid with X or O
+			let div = document.createElement('div');
+			div.className = "cross-out";
+			div.textContent="";
+			cell.appendChild(div)
+
             row.appendChild(cell);
         }                
         el.appendChild(row);
@@ -174,6 +191,11 @@ function createGrid(el) {
 			el.appendChild(row);
 		}
 	}
+
+	Array.from(el.getElementsByClassName("cross-out")).forEach(element => {
+		element.display = 'none'
+	});
+	
 }
 
 
