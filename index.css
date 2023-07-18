@@ -1,6 +1,7 @@
 :root {
     --charcoal: #233D4D;
-    --pale-dogwoord: #FAC9B8;
+    --pale-dogwoord: #fac8b8e2;
+    --light-page-dogwoord: #FAC9B8;
     --eggplant: #744253;
 }
 
@@ -27,11 +28,11 @@ body {
 }
 
 .highlight-subgrid {
-    filter: brightness(0.77);
+    background-color: var(--light-page-dogwoord);
 }
 
 .row_l2 .highlight-cell {
-    filter: brightness(0.87);
+    background-color: var(--light-page-dogwoord);
 }
 
 .row_l1 {
@@ -66,12 +67,12 @@ body {
 /* ====== BUTTON STYLE ====== */
 #but {
     width: 95px;
-    height: 40px;
-    border: 1px solid var(--pale-dogwoord);
+    height: 50px;
+    border: 1px solid var(--light-pale-dogwoord);
     margin-top: 20px;
-    border-radius: 4px;
+    border-radius: 8px;
     font-family: Verdana, Tahoma, sans-serif;
-    background-color: var(--pale-dogwoord);
+    background-color: var(--light-page-dogwoord);
     color: white;
     font-size: 20px;
     cursor: pointer;
