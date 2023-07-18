@@ -83,7 +83,11 @@ class MainGrid {
 		
 		//Move is playable
 		//unhighlight current grid
-		document.getElementById(`subgrid${gridNbr}`).classList.remove("highlight-subgrid");
+		// document.getElementById(`subgrid${gridNbr}`).classList.remove("highlight-subgrid");
+		// console.log(document.getElementsByClassName("cell_l1").array);
+		document.querySelectorAll(".cell_l1").forEach(element => {
+			element.classList.remove("highlight-subgrid");
+		}); 
 		//unhighlight played cell
 		document.getElementById(this.lastMove).classList.remove("highlight-cell");
 
@@ -94,9 +98,14 @@ class MainGrid {
 			this.nextGrid = this.anyGrid;
 		} 
 		//highlight nextGrid
-		let nxt = document.getElementById(`subgrid${this.nextGrid}`);
-		if(nxt != null) {
-			nxt.classList.add("highlight-subgrid");
+		if(this.nextGrid != this.anyGrid) {
+			document.getElementById(`subgrid${this.nextGrid}`).classList.add("highlight-subgrid");
+		} else {	
+			//highlight all subgrids that are still playable
+			this.subgrids.map((subgrid, index) => [subgrid, index])
+						 .filter(el => el[0].won == Player.None)
+						 .map(el => `subgrid${el[1]}`)
+						 .forEach(str => document.getElementById(str).classList.add("highlight-subgrid"));
 		}
 		this.updateWon();
 
