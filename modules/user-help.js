@@ -2,6 +2,9 @@ import { Player } from "./player.js";
 
 let text = document.getElementById("user-help");
 
+function showPlayerTurn(player) {
+    text.textContent = `Player ${player}'s turn`
+}
 
 function clearText() {
     text.textContent = "";
@@ -18,4 +21,4 @@ function playerWon(player) {
     }
 }
 
-export { cantPlay, clearText, playerWon };
+export { cantPlay, clearText, playerWon, showPlayerTurn };
