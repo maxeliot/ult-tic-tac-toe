@@ -29,8 +29,10 @@ class SubGrid {
 
 	//returns true if can play move, false otherwise
 	play(i, j) {
-		if(this.won != Player.None || this.grid[i * 3 + j] != Player.None) 
+		if(this.won != Player.None || this.grid[i * 3 + j] != Player.None) {
 			return false;
+		}
+
 		this.grid[i * 3 + j] = currPlayer;
 		this.updateWon();
 		return true;
@@ -64,13 +66,19 @@ class MainGrid {
 	}
 
 	//returns true if can play move, false otherwise
+	//(x,y) are the coordinates of main grid
+	//(i,j) are the coordinates inside subgrid
 	play(x, y, i, j) {
 		clearText();
 		let gridNbr = x * 3 + y;
-		if(this.won != Player.None || (gridNbr != this.nextGrid && this.nextGrid != this.anyGrid)) 
+		if(this.won != Player.None //if game is already over
+			|| (gridNbr != this.nextGrid && this.nextGrid != this.anyGrid)) //or we didn't play in correct subgrid
+		{
 			return false;
-
-		if(!this.subgrids[gridNbr].play(i, j)) //if can't play in subgrid, return false (dont'play)
+		}
+		
+		//try to play in subgrid, if can't return false (dont'play)
+		if(!this.subgrids[gridNbr].play(i, j)) 
 			return false; 
 		
 		//Move is playable
@@ -79,19 +87,16 @@ class MainGrid {
 		//unhighlight played cell
 		document.getElementById(this.lastMove).classList.remove("highlight-cell");
 
-		if(this.subgrids[gridNbr].won != Player.None)
+		//next grid is determined by cell of subgrid we played in
+		this.nextGrid = i*3+j;
+		//if next player is sent to an already completed grid (won or tie), they can play anywhere
+		if(this.subgrids[this.nextGrid].won != Player.None) {
 			this.nextGrid = this.anyGrid;
-		else {
-			//next grid is determined by cell of subgrid we played in
-			this.nextGrid = i*3+j;
-			if(this.subgrids[this.nextGrid].won != Player.None) {
-				this.nextGrid = this.anyGrid;
-			} 
-			//highlight nextGrid
-			let nxt = document.getElementById(`subgrid${this.nextGrid}`);
-			if(nxt != null) {
-				nxt.classList.add("highlight-subgrid");
-			}
+		} 
+		//highlight nextGrid
+		let nxt = document.getElementById(`subgrid${this.nextGrid}`);
+		if(nxt != null) {
+			nxt.classList.add("highlight-subgrid");
 		}
 		this.updateWon();
 
@@ -163,23 +168,23 @@ function createGrid(el) {
 }
 
 
-function cellClick(x, y, i, j) {
-	let id = [x, y ,i, j].join("");
-	let cell = document.getElementById(id);
-	cell.innerHTML = currPlayer;
-	
-	if(currPlayer == Player.X) currPlayer = Player.O;
-	else currPlayer = Player.X;
-	showPlayerTurn(currPlayer);
-}
-
 //checks if move is valid and then play move
 function makeMove(x, y, i, j) {
 	if(grid.play(x, y, i, j) === false) {
 		cantPlay();
 		return;
 	}
-	cellClick(x, y, i, j);
+	let id = [x, y ,i, j].join("");
+	let cell = document.getElementById(id);
+	cell.innerHTML = currPlayer;
+	
+	if(currPlayer == Player.X) currPlayer = Player.O;
+	else currPlayer = Player.X;
+	
+	//if game is still in play, display next player turn
+	if(grid.won == Player.None) {
+		showPlayerTurn(currPlayer);
+	}
 	return;
 }
 
