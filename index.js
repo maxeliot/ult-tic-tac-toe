@@ -6,6 +6,10 @@ import { createGrid, makeMove } from "./modules/grid.js";
 
 createGrid(document.getElementById('grid'));
 
+document.querySelectorAll(".cell_l1").forEach(element => {
+	element.classList.add("highlight-subgrid");
+});
+
 function reset() {
 	location.reload();
 }
