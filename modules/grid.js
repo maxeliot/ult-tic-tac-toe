@@ -1,5 +1,5 @@
 import { Player } from "./player.js";
-import { clearText, cantPlay, playerWon } from "./user-help.js";
+import { clearText, cantPlay, playerWon, showPlayerTurn } from "./user-help.js";
 
 let currPlayer = Player.X;
 
@@ -170,6 +170,7 @@ function cellClick(x, y, i, j) {
 	
 	if(currPlayer == Player.X) currPlayer = Player.O;
 	else currPlayer = Player.X;
+	showPlayerTurn(currPlayer);
 }
 
 //checks if move is valid and then play move
