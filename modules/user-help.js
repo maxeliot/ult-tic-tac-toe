@@ -11,7 +11,6 @@ function clearText() {
 }
 
 function showCantPlay() {
-    text.textContent = "";
     text.textContent = "You can't play here !";
 }
 

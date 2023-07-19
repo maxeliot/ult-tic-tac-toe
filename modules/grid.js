@@ -1,5 +1,5 @@
 import { Player } from "./player.js";
-import { clearText, showCantPlay, showPlayerWon, 
+import { showCantPlay, showPlayerWon, 
 	showPlayerTurn, unhighlightPrev, highlightDisplayMove } from "./user-help.js";
 import { subgridWinner, maingridWinner, subgridIllegalMove,
 	 maingridIllegalMove } from "./rules.js";
@@ -15,7 +15,7 @@ GRID IS ENCODED AS 1-D ARRAY
 class SubGrid {
 	constructor() {
 		this.won = Player.None;
-		//empty grid
+		//init with empty grid
 		this.grid = Array(9).fill(Player.None);
 	}
 
@@ -27,13 +27,11 @@ class SubGrid {
 		}
 
 		this.grid[i * 3 + j] = currPlayer;
-		this.updateWon();
+		
+		this.won = subgridWinner(this.grid);
 		return true;
 	}
 
-	updateWon() {
-		this.won = subgridWinner(this.grid);		
-	}
 }
 
 class MainGrid {
@@ -58,8 +56,6 @@ class MainGrid {
 		//try to play in subgrid, if can't return false (dont'play)
 		if(!this.subgrids[gridNbr].play(i, j)) 
 			return false; 
-		
-		// this.lastMove = [x, y, i, j].join("");
 
 		//next grid is determined by cell of subgrid we played in
 		this.nextGrid = i*3 + j;
@@ -68,13 +64,10 @@ class MainGrid {
 			this.nextGrid = this.anyGrid;
 		} 
 		
-		this.updateWon();
+		this.won = maingridWinner(this.subgrids);
 		return true;
 	}
 
-	updateWon() {
-		this.won = maingridWinner(this.subgrids);
-	}
 }
 
 let grid = new MainGrid();
@@ -127,10 +120,6 @@ function createGrid(el) {
 			el.appendChild(row);
 		}
 	}
-
-	Array.from(el.getElementsByClassName("cross-out")).forEach(element => {
-		element.display = 'none'
-	});
 	
 }
 
@@ -139,7 +128,6 @@ function createGrid(el) {
 //highlights played cell
 function makeMove(x, y, i, j) {
 	return function() {
-		clearText();
 
 		if (grid.play(x, y, i, j) === false) {
 			showCantPlay();
@@ -149,8 +137,13 @@ function makeMove(x, y, i, j) {
 		unhighlightPrev(grid);
 		highlightDisplayMove(grid, x, y, i, j, currPlayer);
 		
-		id = [x, y, i, j].join("");
+		/* TODO 
+		I would like to do this inside of the MainGrid.play function,
+		but since we need to unhighlight lastMove we need to do it after?
+		*/
+		let id = [x, y, i, j].join("");
 		grid.lastMove = id;
+		
 
 		//player switch
 		currPlayer = (currPlayer == Player.X) ? Player.O : Player.X;
