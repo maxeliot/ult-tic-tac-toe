@@ -153,6 +153,9 @@ function makeMove(x, y, i, j) {
 			showPlayerTurn(currPlayer);
 		} else {
 			showPlayerWon(grid.won);
+			//make cells non clickable
+			document.querySelectorAll(".cell_l2").forEach(el => el.onclick = '');
+			unhighlightPrev(grid);
 		}
 	};
 }
