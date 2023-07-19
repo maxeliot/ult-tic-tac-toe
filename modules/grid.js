@@ -183,8 +183,10 @@ function createGrid(el) {
 				const cell = document.createElement('div');
 				cell.className = "cell_l2";
 				cell.id = [x, y ,i, j].join("");
+				
 				//clicking a cell will call function with cell coordinates.
-				cell.setAttribute("onclick", `makeMove(${x},${y},${i},${j})`); 
+				cell.onclick = makeMove(x,y,i,j);
+
 				cell.innerHTML = Player.None;
 				row.appendChild(cell);
 			}                
@@ -199,26 +201,25 @@ function createGrid(el) {
 }
 
 
-//checks if move is valid and then play move
+// checks if move is valid and then play move
 function makeMove(x, y, i, j) {
-	if(grid.play(x, y, i, j) === false) {
+	return function() {
+	  if (grid.play(x, y, i, j) === false) {
 		cantPlay();
 		return;
-	}
-	let id = [x, y ,i, j].join("");
-	let cell = document.getElementById(id);
-	cell.innerHTML = currPlayer;
-	
-	if(currPlayer == Player.X) currPlayer = Player.O;
-	else currPlayer = Player.X;
-	
-	//if game is still in play, display next player turn
-	if(grid.won == Player.None) {
+	  }
+	  let id = [x, y, i, j].join("");
+	  let cell = document.getElementById(id);
+	  cell.innerHTML = currPlayer;
+	  
+	  //player switch
+	  currPlayer = (currPlayer == Player.X) ? Player.O : Player.X;
+  
+	  if (grid.won == Player.None) {
 		showPlayerTurn(currPlayer);
-	}
-	return;
+	  }
+	};
 }
-
 
 
 export { createGrid, makeMove };
