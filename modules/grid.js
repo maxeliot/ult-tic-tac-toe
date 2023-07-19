@@ -1,5 +1,6 @@
 import { Player } from "./player.js";
 import { clearText, cantPlay, playerWon, showPlayerTurn } from "./user-help.js";
+import { subgridWinner, maingridWinner } from "./rules.js";
 
 let currPlayer = Player.X;
 
@@ -9,17 +10,6 @@ GRID IS ENCODED AS 1-D ARRAY
 3 4 5 
 6 7 8
 */
-const winningCombinations = [
-    [0, 1, 2], // Top row
-    [3, 4, 5], // Middle row
-    [6, 7, 8], // Bottom row
-    [0, 3, 6], // Left column
-    [1, 4, 7], // Middle column
-    [2, 5, 8], // Right column
-    [0, 4, 8], // Diagonal from top-left to bottom-right
-    [2, 4, 6]  // Diagonal from top-right to bottom-left
-];
-
 class SubGrid {
 	constructor() {
 		this.won = Player.None;
@@ -39,20 +29,7 @@ class SubGrid {
 	}
 
 	updateWon() {
-		
-		for (let combination of winningCombinations) {
-			const [a, b, c] = combination;
-			if (this.grid[a] != Player.None && this.grid[a] === this.grid[b] && this.grid[a] === this.grid[c]) {
-                this.won = this.grid[a];
-                return;
-			}
-		}
-
-		if (!this.grid.includes(Player.None)) {
-			this.won = Player.Tie;
-			return;
-		}
-		
+		this.won = subgridWinner(this.grid);		
 	}
 }
 
@@ -127,19 +104,9 @@ class MainGrid {
 	}
 
 	updateWon() {
-		for (let combination of winningCombinations) {
-			const [a, b, c] = combination;
-			if (this.subgrids[a].won === this.subgrids[b].won && this.subgrids[a].won === this.subgrids[c].won) {
-			  this.won = this.subgrids[a].won;
-			  playerWon(this.won);
-			  return;
-			}
-		}
-		if (!this.subgrids.map(subgrid => subgrid.won).includes(Player.None)) {
-			this.won = Player.Tie
-			playerWon(this.won);
-			return
-		}
+		this.won = maingridWinner(this.subgrids);
+
+		playerWon(this.won);
 	}
 }
 
