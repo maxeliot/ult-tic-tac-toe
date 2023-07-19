@@ -1,5 +1,5 @@
 import { Player } from "./player.js";
-import { clearText, cantPlay, playerWon, showPlayerTurn } from "./user-help.js";
+import { clearText, showCantPlay, showPlayerWon, showPlayerTurn } from "./user-help.js";
 import { subgridWinner, maingridWinner } from "./rules.js";
 
 let currPlayer = Player.X;
@@ -105,8 +105,7 @@ class MainGrid {
 
 	updateWon() {
 		this.won = maingridWinner(this.subgrids);
-
-		playerWon(this.won);
+		showPlayerWon(this.won);
 	}
 }
 
@@ -172,7 +171,7 @@ function createGrid(el) {
 function makeMove(x, y, i, j) {
 	return function() {
 	  if (grid.play(x, y, i, j) === false) {
-		cantPlay();
+		showCantPlay();
 		return;
 	  }
 	  let id = [x, y, i, j].join("");

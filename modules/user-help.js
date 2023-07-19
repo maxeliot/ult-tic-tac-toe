@@ -10,15 +10,15 @@ function clearText() {
     text.textContent = "";
 }
 
-function cantPlay() {
+function showCantPlay() {
     text.textContent = "";
     text.textContent = "You can't play here !";
 }
 
-function playerWon(player) {
+function showPlayerWon(player) {
     if(player != Player.None) {
         text.textContent = `Player ${player} won the game!` 
     }
 }
 
-export { cantPlay, clearText, playerWon, showPlayerTurn };
+export { showCantPlay, clearText, showPlayerWon, showPlayerTurn };
