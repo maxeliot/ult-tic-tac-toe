@@ -1,15 +1,14 @@
-/* //returns true if a move is valid, false otherwise
-function isValid(grid, x, y, i, j) {
+import { Player } from "./player.js";
 
+//returns false if a move is valid, true if it isn't
+function illegalMove(subgrid, i, j) {
+    let cellOccupied = subgrid.grid[i * 3 + j] != Player.None;
+    let gridAlreadyWon = subgrid.won != Player.None;
+    return cellOccupied || gridAlreadyWon;
 }
 
 
-// Returns inProgress/winX/winO/draw
-function gameState(grid) {
 
-} */
-
-import { Player } from "./player.js";
 
 const winningCombinations = [
     [0, 1, 2], // Top row
@@ -58,4 +57,4 @@ function maingridWinner(subgrids) {
     return winner;
 }
 
-export { subgridWinner, maingridWinner };
+export { subgridWinner, maingridWinner, illegalMove };

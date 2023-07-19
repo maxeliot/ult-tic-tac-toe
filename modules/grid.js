@@ -1,6 +1,6 @@
 import { Player } from "./player.js";
 import { clearText, showCantPlay, showPlayerWon, showPlayerTurn } from "./user-help.js";
-import { subgridWinner, maingridWinner } from "./rules.js";
+import { subgridWinner, maingridWinner, illegalMove } from "./rules.js";
 
 let currPlayer = Player.X;
 
@@ -19,7 +19,8 @@ class SubGrid {
 
 	//returns true if can play move, false otherwise
 	play(i, j) {
-		if(this.won != Player.None || this.grid[i * 3 + j] != Player.None) {
+		
+		if(illegalMove(this, i, j)) {
 			return false;
 		}
 
