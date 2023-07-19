@@ -1,6 +1,8 @@
 import { Player } from "./player.js";
-import { clearText, showCantPlay, showPlayerWon, showPlayerTurn } from "./user-help.js";
-import { subgridWinner, maingridWinner, subgridIllegalMove, maingridIllegalMove } from "./rules.js";
+import { clearText, showCantPlay, showPlayerWon, 
+	showPlayerTurn, unhighlightPrev, highlightDisplayMove } from "./user-help.js";
+import { subgridWinner, maingridWinner, subgridIllegalMove,
+	 maingridIllegalMove } from "./rules.js";
 
 let currPlayer = Player.X;
 
@@ -47,8 +49,7 @@ class MainGrid {
 	//(x,y) are the coordinates of main grid
 	//(i,j) are the coordinates inside subgrid
 	play(x, y, i, j) {
-		clearText();
-		let gridNbr = x * 3 + y;
+		let gridNbr = x*3 + y;
 
 		if(maingridIllegalMove(this, gridNbr)) {
 			return false;
@@ -58,54 +59,21 @@ class MainGrid {
 		if(!this.subgrids[gridNbr].play(i, j)) 
 			return false; 
 		
-		//cross out subgrid if it is won
-		if(this.subgrids[gridNbr].won != Player.None) {
-			let el = document.getElementById(`subgrid${gridNbr}`)
-			el.querySelectorAll(".row_l2").forEach(el => el.style.display = 'none');
-			el.querySelector(".cross-out").display = 'block';
-			el.querySelector(".cross-out").textContent = this.subgrids[gridNbr].won;
-			el.querySelector(".cross-out").style.width = "100%";
-			el.querySelector(".cross-out").style.height = "100%";
-		}
-
-		//Move is playable
-		//unhighlight current grid
-		// document.getElementById(`subgrid${gridNbr}`).classList.remove("highlight-subgrid");
-		// console.log(document.getElementsByClassName("cell_l1").array);
-		document.querySelectorAll(".cell_l1").forEach(element => {
-			element.classList.remove("highlight-subgrid");
-		}); 
-		//unhighlight played cell
-		document.getElementById(this.lastMove).classList.remove("highlight-cell");
+		// this.lastMove = [x, y, i, j].join("");
 
 		//next grid is determined by cell of subgrid we played in
-		this.nextGrid = i*3+j;
+		this.nextGrid = i*3 + j;
 		//if next player is sent to an already completed grid (won or tie), they can play anywhere
 		if(this.subgrids[this.nextGrid].won != Player.None) {
 			this.nextGrid = this.anyGrid;
 		} 
-		//highlight nextGrid
-		if(this.nextGrid != this.anyGrid) {
-			document.getElementById(`subgrid${this.nextGrid}`).classList.add("highlight-subgrid");
-		} else {	
-			//highlight all subgrids that are still playable
-			this.subgrids.map((subgrid, index) => [subgrid, index])
-						 .filter(el => el[0].won == Player.None)
-						 .map(el => `subgrid${el[1]}`)
-						 .forEach(str => document.getElementById(str).classList.add("highlight-subgrid"));
-		}
-		this.updateWon();
-
 		
-		//highlight played cell
-		this.lastMove = [x, y ,i, j].join("");
-		document.getElementById(this.lastMove).classList.add("highlight-cell");
+		this.updateWon();
 		return true;
 	}
 
 	updateWon() {
 		this.won = maingridWinner(this.subgrids);
-		showPlayerWon(this.won);
 	}
 }
 
@@ -167,23 +135,32 @@ function createGrid(el) {
 }
 
 
-// checks if move is valid and then play move
+//Checks if move is valid and then plays move
+//highlights played cell
 function makeMove(x, y, i, j) {
 	return function() {
-	  if (grid.play(x, y, i, j) === false) {
-		showCantPlay();
-		return;
-	  }
-	  let id = [x, y, i, j].join("");
-	  let cell = document.getElementById(id);
-	  cell.innerHTML = currPlayer;
-	  
-	  //player switch
-	  currPlayer = (currPlayer == Player.X) ? Player.O : Player.X;
-  
-	  if (grid.won == Player.None) {
-		showPlayerTurn(currPlayer);
-	  }
+		clearText();
+
+		if (grid.play(x, y, i, j) === false) {
+			showCantPlay();
+			return;
+		}
+		
+		unhighlightPrev(grid);
+		highlightDisplayMove(grid, x, y, i, j, currPlayer);
+		
+		id = [x, y, i, j].join("");
+		grid.lastMove = id;
+
+		//player switch
+		currPlayer = (currPlayer == Player.X) ? Player.O : Player.X;
+	
+		//next player turn or end of game
+		if (grid.won == Player.None) {
+			showPlayerTurn(currPlayer);
+		} else {
+			showPlayerWon(grid.won);
+		}
 	};
 }
 
