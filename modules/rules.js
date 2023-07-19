@@ -1,13 +1,20 @@
 import { Player } from "./player.js";
 
 //returns false if a move is valid, true if it isn't
-function illegalMove(subgrid, i, j) {
+function subgridIllegalMove(subgrid, i, j) {
     let cellOccupied = subgrid.grid[i * 3 + j] != Player.None;
     let gridAlreadyWon = subgrid.won != Player.None;
     return cellOccupied || gridAlreadyWon;
 }
 
+//returns false if a move is valid, true if it isn't
+function maingridIllegalMove(maingrid, gridNbr) {
 
+    let incorrectSubgrid = gridNbr != maingrid.nextGrid && maingrid.nextGrid != maingrid.anyGrid;
+    let gridAlreadyWon = maingrid.won != Player.None;
+
+    return incorrectSubgrid || gridAlreadyWon;
+}
 
 
 const winningCombinations = [
@@ -57,4 +64,4 @@ function maingridWinner(subgrids) {
     return winner;
 }
 
-export { subgridWinner, maingridWinner, illegalMove };
+export { subgridWinner, maingridWinner, subgridIllegalMove, maingridIllegalMove };
