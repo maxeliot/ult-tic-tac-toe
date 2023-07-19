@@ -16,7 +16,7 @@ function showCantPlay() {
 
 function showPlayerWon(player) {
     if(player != Player.None) {
-        text.textContent = `Player ${player} won the game!` 
+        text.textContent = `Player ${player} won the game!`;
     }
 }
 
