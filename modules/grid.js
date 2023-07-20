@@ -120,6 +120,8 @@ function createGrid(el) {
 			el.appendChild(row);
 		}
 	}
+
+	showPlayerTurn(currPlayer);
 	
 }
 
