@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "This is a small side project I'm using to learn web development.   I will publish the link to play once I have finished!",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "jest"
+    "test": "node --experimental-vm-modules ./node_modules/.bin/jest --env=jsdom"
   },
   "repository": {
     "type": "git",
@@ -19,5 +20,8 @@
   "homepage": "https://github.com/maxeliot/ult-tic-tac-toe#readme",
   "devDependencies": {
     "jest": "^29.6.1"
+  },
+  "dependencies": {
+    "jest-environment-jsdom": "^29.6.1"
   }
 }
