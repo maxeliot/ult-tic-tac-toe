@@ -161,5 +161,5 @@ function makeMove(x, y, i, j) {
 }
 
 
-export { createGrid, makeMove };
+export { createGrid, makeMove, SubGrid };
 
