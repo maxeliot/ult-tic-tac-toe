@@ -14,8 +14,8 @@ app.get('/', async (request, response) => {
     //     response.send(html);
     // });
 
-    response.send( await readFile("./index.html", "utf-8"));
+    response.send( await readFile("./www/index.html", "utf-8"));
 });
 
-app.use(express.static("."));
+app.use(express.static("./www/"));
 app.listen(process.env.PORT || 3000, () => console.log("App available on http://localhost:3000"));
