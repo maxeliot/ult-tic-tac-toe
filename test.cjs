@@ -6,14 +6,6 @@ const app = express();
 
 
 app.get('/', async (request, response) => {
-    // readFile("./index.html", "utf-8", (err, html) => {
-    //     if(err) {
-    //         response.status(500).send("sorry");
-    //     }
-
-    //     response.send(html);
-    // });
-
     response.send( await readFile("./www/index.html", "utf-8"));
 });
 
