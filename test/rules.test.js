@@ -1,6 +1,6 @@
-import { SubGrid } from "../modules/grid.js";
-import { Player } from "../modules/player.js";
-import { subgridWinner } from "../modules/rules";
+import { SubGrid } from "../www/modules/grid.js";
+import { Player } from "../www/modules/player.js";
+import { subgridWinner } from "../www/modules/rules";
 
 test("correctly determine subgrid winner", () => {
     let subgrid1 = new SubGrid();
