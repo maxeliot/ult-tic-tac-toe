@@ -3,8 +3,10 @@ import { showCantPlay, showPlayerWon,
 	showPlayerTurn, unhighlightPrev, highlightDisplayMove } from "./user-help.js";
 import { subgridWinner, maingridWinner, subgridIllegalMove,
 	 maingridIllegalMove } from "./rules.js";
+import { getSocket } from "../index.js";
 
 let currPlayer = Player.X;
+let waitingOpponent = true;
 
 /* 
 GRID IS ENCODED AS 1-D ARRAY
@@ -49,7 +51,7 @@ class MainGrid {
 	play(x, y, i, j) {
 		let gridNbr = x*3 + y;
 
-		if(maingridIllegalMove(this, gridNbr)) {
+        if(maingridIllegalMove(this, gridNbr)) {
 			return false;
 		}
 		
@@ -112,7 +114,7 @@ function createGrid(el) {
 				cell.id = [x, y ,i, j].join("");
 				
 				//clicking a cell will call function with cell coordinates.
-				cell.onclick = makeMove(x,y,i,j);
+				cell.onclick = makeMove(x,y,i,j, false);
 
 				cell.innerHTML = Player.None;
 				row.appendChild(cell);
@@ -128,10 +130,11 @@ function createGrid(el) {
 
 //Checks if move is valid and then plays move
 //highlights played cell
-function makeMove(x, y, i, j) {
+function makeMove(x, y, i, j, fromSocket=true) {
 	return function() {
 
-		if (grid.play(x, y, i, j) === false) {
+        //order matters here
+		if ((waitingOpponent && !fromSocket) || grid.play(x, y, i, j) === false) {
 			showCantPlay();
 			return;
 		}
@@ -146,6 +149,12 @@ function makeMove(x, y, i, j) {
 		let id = [x, y, i, j].join("");
 		grid.lastMove = id;
 		
+        //if this is our move, send move to server
+        if(!waitingOpponent) {
+            getSocket().emit('move', id);
+            waitingOpponent = true;
+        }
+        
 
 		//player switch
 		currPlayer = (currPlayer == Player.X) ? Player.O : Player.X;
@@ -162,6 +171,10 @@ function makeMove(x, y, i, j) {
 	};
 }
 
+function yourTurn() {
+    waitingOpponent = false;
+}
 
-export { createGrid, makeMove, SubGrid };
+
+export { createGrid, makeMove, SubGrid, yourTurn };
 
