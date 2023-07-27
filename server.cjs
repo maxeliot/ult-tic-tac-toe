@@ -20,6 +20,15 @@ io.on('connection', (socket) => {
         return;
     }
 
+    if(players.length == 1) { 
+        socket.emit('matched with player');
+        io.emit('start');
+    }
+
+    if(players.length == 0) {
+        socket.emit('waiting for player');
+    }
+
     players.push(socket.id);
     console.log('a user connected');
     
@@ -28,6 +37,10 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         players = players.filter(player => player !== socket.id);
         console.log('user disconnected');
+    });
+
+    socket.on('move', (move) => {
+        socket.broadcast.emit('move', move);
     });
      
 });
