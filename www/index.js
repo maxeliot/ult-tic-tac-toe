@@ -16,6 +16,10 @@ function reset() {
 
 //SOCKETIO SETUP
 var socket = io();
+socket.on('full', () => {
+    alert("Game is full");
+    location.reload();
+});
 
 //why do i need to do this..
 window.makeMove = makeMove;

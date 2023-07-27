@@ -11,11 +11,23 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/www/index.html');
 });
 
+let players = [];
+
 io.on('connection', (socket) => {
+    if(players.length >= 2) { 
+        socket.emit('full');
+        socket.disconnect(true);
+        return;
+    }
+
+    players.push(socket.id);
     console.log('a user connected');
+    
+    
 
     socket.on('disconnect', () => {
-      console.log('user disconnected');
+        players = players.filter(player => player !== socket.id);
+        console.log('user disconnected');
     });
      
 });
