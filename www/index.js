@@ -14,6 +14,9 @@ function reset() {
 	location.reload();
 }
 
+//SOCKETIO SETUP
+var socket = io();
+
 //why do i need to do this..
 window.makeMove = makeMove;
 window.reset = reset;
