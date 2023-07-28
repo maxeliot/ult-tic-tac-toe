@@ -14,9 +14,24 @@ body {
     text-align: center;
 }
 
-
+h2 {
+    color: white;
+    font-size: 30px;
+    text-decoration: underline;
+}
+h2:hover {
+    cursor:pointer;
+}
+#rules {
+    color:white;
+    font-size: 20px;
+}
 
 /* ====== GRID STYLE ====== */
+#grid {
+    margin-top: 50px;
+}
+
 .cell_l1 {
     display: flex;
     flex-direction: column;

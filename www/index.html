@@ -6,11 +6,28 @@
 <link rel="stylesheet" type="text/css" href="index.css">
 <script type="module" src="./index.js"></script>
 <script src="/socket.io/socket.io.js"></script>
+
+<script>function hideRules() {
+    var x = document.getElementById("rules");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}</script>
 </head>
 
 <body>	
 	<div id="main">
 
+        <h2 onclick="hideRules()">Ultimate-Tic-Tac-Toe Rules (show/hide)</h2>
+        <p id="rules" style="display:none">It's like a normal tic-tac-toe, except each cell is composed
+            of an inner tic-tac-toe. <br>
+            You have to win 3 sub-tic-tac-toe's in a row, column or diagonal. <br>
+            Your move sends the opponent to the bigger cell of the subcell you clicked,
+            where they have to play.
+            <br>You will understand by playing, Good luck!
+        </p>
         <div id="grid"></div>
 		
 		<button id="but" onclick="reset()">
