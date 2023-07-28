@@ -50,7 +50,7 @@ function maingridWinner(subgrids) {
     let winner = Player.None;
     for (let combination of winningCombinations) {
         const [a, b, c] = combination;
-        if (subgrids[a].won === subgrids[b].won && subgrids[a].won === subgrids[c].won) {
+        if (subgrids[a].won != Player.None && subgrids[a].won === subgrids[b].won && subgrids[a].won === subgrids[c].won) {
             winner = subgrids[a].won;
             return winner;
         }
